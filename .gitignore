@@ -10,3 +10,6 @@ outputs/
 
 # Local tool state
 .pen
+
+.idea
+uv.locksrc/logs/

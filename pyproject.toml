@@ -1,0 +1,27 @@
+[project]
+name = "qwen3-tts-test"
+version = "0.1.0"
+description = "Qwen3 TTS voice cloning test"
+requires-python = ">=3.10"
+dependencies = [
+    "gradio>=5.0",
+    "numpy>=1.26",
+    "soundfile>=0.12",
+    "torch>=2.3.0",
+    "qwen-tts",
+    "numba>=0.59.0",
+    "pydub>=0.25.0",
+]
+
+[project.scripts]
+app = "qwen3_tts_test.app_gradio:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/qwen3_tts_test"]
+
+[tool.uv]
+python-preference = "only-managed"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
