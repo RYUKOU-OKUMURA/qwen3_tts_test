@@ -15,6 +15,15 @@ class VoiceCloneError(RuntimeError):
     """User-facing errors for voice clone operations."""
 
 
+def _is_numeric_stability_error(msg: str) -> bool:
+    lowered = msg.lower()
+    return (
+        "probability tensor contains either" in lowered
+        or "nan" in lowered
+        or "inf" in lowered
+    )
+
+
 def _run_ffmpeg_to_wav(in_path: Path, out_path: Path, sr: int = 16000) -> None:
     if shutil.which("ffmpeg") is None:
         raise VoiceCloneError("ffmpeg が見つかりません。`brew install ffmpeg` を実行してください。")
@@ -195,7 +204,7 @@ def generate_voice_waveform(
     input_text: str,
     language: str = "Japanese",
     model_id: str = "Qwen/Qwen3-TTS-12Hz-0.6B-Base",
-    device: str = "auto",
+    device: str = "mps",
     x_vector_only_mode: bool = False,
 ) -> tuple[Any, int, dict[str, str]]:
     ref_audio = Path(ref_audio_path).expanduser().resolve()
@@ -220,13 +229,22 @@ def generate_voice_waveform(
         ref_wav = Path(td) / "ref.wav"
         _run_ffmpeg_to_wav(ref_audio, ref_wav, sr=16000)
 
-        wavs, sample_rate = model.generate_voice_clone(
-            text=input_text,
-            language=language,
-            ref_audio=str(ref_wav),
-            ref_text=(ref_text or None),
-            x_vector_only_mode=bool(x_vector_only_mode),
-        )
+        try:
+            wavs, sample_rate = model.generate_voice_clone(
+                text=input_text,
+                language=language,
+                ref_audio=str(ref_wav),
+                ref_text=(ref_text or None),
+                x_vector_only_mode=bool(x_vector_only_mode),
+            )
+        except RuntimeError as exc:
+            msg = str(exc)
+            if _is_numeric_stability_error(msg):
+                raise VoiceCloneError(
+                    "NUMERIC_STABILITY_ERROR: 生成中に数値エラー(inf/nan)が発生しました。"
+                    " 文章を短く区切るか、速度重視(0.6B)モデルを試してください。"
+                ) from exc
+            raise VoiceCloneError(f"音声生成に失敗しました: {msg}") from exc
 
     if not wavs:
         raise VoiceCloneError("音声生成結果が空でした。入力テキストを見直してください。")
@@ -247,7 +265,7 @@ def synthesize_voice_clone(
     output_dir: str,
     language: str = "Japanese",
     model_id: str = "Qwen/Qwen3-TTS-12Hz-0.6B-Base",
-    device: str = "auto",
+    device: str = "mps",
 ) -> dict[str, object]:
     errors = validate_required_inputs(ref_audio_path, ref_text, input_text, output_dir)
     if errors:
@@ -299,6 +317,17 @@ def synthesize_voice_clone(
             "message": str(exc),
         }
     except Exception as exc:
+        msg = str(exc)
+        if _is_numeric_stability_error(msg):
+            return {
+                "ok": False,
+                "output_path": None,
+                "sample_rate": None,
+                "message": (
+                    "生成中に数値エラー(inf/nan)が発生しました。"
+                    " 文章を短く区切るか、速度重視(0.6B)モデルを試してください。"
+                ),
+            }
         return {
             "ok": False,
             "output_path": None,

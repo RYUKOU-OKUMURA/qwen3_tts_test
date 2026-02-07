@@ -41,7 +41,7 @@ def main() -> None:
     ap.add_argument("--out", required=True, help="出力 wav パス")
     ap.add_argument("--model", default="Qwen/Qwen3-TTS-12Hz-0.6B-Base", help="Voice Clone用 Base モデル")
     ap.add_argument("--language", default="Japanese", help="Japanese / English / auto など")
-    ap.add_argument("--device", default="auto", help="auto / mps / cpu / cuda:0")
+    ap.add_argument("--device", default="mps", help="mps / auto / cpu / cuda:0")
     ap.add_argument("--silence", type=float, default=0.25, help="行間無音秒")
     args = ap.parse_args()
 

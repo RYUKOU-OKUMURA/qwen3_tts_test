@@ -1,5 +1,5 @@
 gradio>=5.0,<6.0
 numpy>=1.26,<3.0
 soundfile>=0.12,<1.0
-torch>=2.3.0
+torch>=2.3.0,<2.10
 qwen-tts

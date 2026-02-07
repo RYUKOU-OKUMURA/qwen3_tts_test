@@ -10,6 +10,7 @@ from voice_clone_core import preflight_check, synthesize_voice_clone, validate_r
 MODEL_QUALITY = "Qwen/Qwen3-TTS-12Hz-1.7B-Base"
 MODEL_SPEED = "Qwen/Qwen3-TTS-12Hz-0.6B-Base"
 MODEL_CUSTOM_VOICE = "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice"
+DEVICE_FIXED = "mps"
 
 MODEL_PRESETS = {
     "品質重視 (1.7B-Base)": MODEL_QUALITY,
@@ -29,7 +30,6 @@ def run_generation(
     language: str,
     output_dir: str,
     model_id: str,
-    device: str,
 ):
     logs: list[str] = []
     progress_value = 0
@@ -70,6 +70,7 @@ def run_generation(
 
     progress_value = 12
     status_text = "生成準備中..."
+    logs.append(f"デバイス: {DEVICE_FIXED} (GPU厳格モード)")
     logs.append("音声生成を開始します。モデル初回読み込み時は時間がかかることがあります。")
     yield flush(enable_button=False)
 
@@ -86,7 +87,7 @@ def run_generation(
                 output_dir=output_dir,
                 language=language,
                 model_id=model_id,
-                device=device,
+                device=DEVICE_FIXED,
             )
         except Exception as exc:
             error_holder["value"] = exc
@@ -174,13 +175,8 @@ def build_ui() -> gr.Blocks:
                         value="品質重視 (1.7B-Base)",
                     )
                     model_id = gr.Textbox(label="モデルID", value=DEFAULT_MODEL, interactive=False)
-                    device = gr.Dropdown(
-                        label="デバイス",
-                        choices=["auto", "mps", "cpu", "cuda:0"],
-                        value="mps",
-                    )
                     gr.Markdown("モデルを自由入力したい場合はプリセットを `カスタム入力` に切り替えてください。")
-                    gr.Markdown("macOSでは `mps` 推奨です。`mps` 選択時はCPUへ自動フォールバックせず、利用不可ならエラー表示します。")
+                    gr.Markdown("デバイスは `mps` 固定です。利用不可の場合はエラーを表示して停止します。")
 
                 run_button = gr.Button("音声を生成", variant="primary")
                 progress_bar = gr.Slider(label="進捗 (%)", minimum=0, maximum=100, step=1, value=0, interactive=False)
@@ -192,7 +188,7 @@ def build_ui() -> gr.Blocks:
 
         run_button.click(
             fn=run_generation,
-            inputs=[ref_audio, ref_text, input_text, language, output_dir, model_id, device],
+            inputs=[ref_audio, ref_text, input_text, language, output_dir, model_id],
             outputs=[log_box, output_audio, output_path, run_button, progress_bar, status_box],
         )
         model_preset.change(

@@ -1,0 +1,12 @@
+# Python cache and build artifacts
+__pycache__/
+*.py[cod]
+
+# Local virtual environment
+.venv/
+
+# Generated outputs
+outputs/
+
+# Local tool state
+.pen
