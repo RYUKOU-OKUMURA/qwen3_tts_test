@@ -12,4 +12,5 @@ outputs/
 .pen
 
 .idea
-uv.locksrc/logs/
+uv.lock
+src/logs/
