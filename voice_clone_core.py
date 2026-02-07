@@ -41,19 +41,43 @@ def _run_ffmpeg_to_wav(in_path: Path, out_path: Path, sr: int = 16000) -> None:
 
 
 def resolve_device(device_arg: str) -> str:
-    if device_arg != "auto":
-        return device_arg
-
     try:
         import torch
     except Exception:
+        if device_arg == "auto":
+            return "cpu"
+        if device_arg == "cpu":
+            return "cpu"
+        raise VoiceCloneError("PyTorch が読み込めないため GPU を使えません。`./setup_mac.sh` を再実行してください。")
+
+    if device_arg == "auto":
+        if torch.backends.mps.is_available():
+            return "mps"
+        if torch.cuda.is_available():
+            return "cuda:0"
         return "cpu"
 
-    if torch.backends.mps.is_available():
-        return "mps"
-    if torch.cuda.is_available():
-        return "cuda:0"
-    return "cpu"
+    if device_arg == "mps":
+        if torch.backends.mps.is_available():
+            return "mps"
+        if torch.backends.mps.is_built():
+            raise VoiceCloneError(
+                "MPS(GPU)を指定しましたが現在の環境では利用できません。"
+                " Python/PyTorchの組み合わせを見直すか、`auto` / `cpu` を選択してください。"
+            )
+        raise VoiceCloneError(
+            "MPS非対応のPyTorchです。Apple Silicon向けPyTorchを入れ直すか、`auto` / `cpu` を選択してください。"
+        )
+
+    if device_arg.startswith("cuda"):
+        if torch.cuda.is_available():
+            return device_arg
+        raise VoiceCloneError("CUDA GPU が利用できません。macOSでは通常 `mps` を利用してください。")
+
+    if device_arg == "cpu":
+        return "cpu"
+
+    raise VoiceCloneError("デバイス指定が不正です。`mps` / `auto` / `cpu` / `cuda:0` を指定してください。")
 
 
 def resolve_runtime_params(device: str) -> tuple[Any, str]:

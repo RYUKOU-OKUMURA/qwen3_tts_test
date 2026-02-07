@@ -35,6 +35,8 @@ chmod +x setup_mac.sh start_gui.sh start_gui.command && \
 - 読み上げテキスト（必須）
 - 保存先ディレクトリ（デフォルト: `./outputs`）
 - モデルプリセット（`品質重視` / `速度重視` / `CustomVoice` / `カスタム入力`）
+- 進捗バーと処理ステータス（生成中の目安を表示）
+- デバイス（macOSは `mps` 推奨。`mps` 利用不可時は明示エラー）
 
 生成後、音声プレイヤーで再生できます。ファイル名は `voiceclone_YYYYmmdd_HHMMSS.wav` で自動保存されます。
 
