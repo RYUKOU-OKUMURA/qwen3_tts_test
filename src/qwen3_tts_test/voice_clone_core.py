@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-import sys
 import tempfile
 from datetime import datetime
 from pathlib import Path
@@ -12,11 +11,6 @@ import soundfile as sf
 import torch
 from pydub import AudioSegment
 from qwen_tts import Qwen3TTSModel
-
-# MPS必須チェック - 起動時に検証
-if not torch.backends.mps.is_available():
-    print("エラー: MPSが利用できません。Apple Silicon Macが必要です。", file=sys.stderr)
-    sys.exit(1)
 
 _MODEL_CACHE: dict[str, Any] = {}
 _logger = logging.getLogger("qwen_tts")
@@ -95,6 +89,10 @@ def generate_voice_waveform(
 ) -> tuple[Any, int]:
     _logger.info("音声生成開始: model=%s, language=%s", model_id, language)
 
+    # MPS availability check at runtime
+    if not torch.backends.mps.is_available():
+        raise VoiceCloneError("MPSが利用できません。Apple Silicon Macが必要です。")
+
     ref_audio = Path(ref_audio_path).expanduser().resolve()
     if not ref_audio.exists():
         _logger.error("参照音声ファイルが見つかりません: %s", ref_audio)
@@ -104,9 +102,7 @@ def generate_voice_waveform(
         raise VoiceCloneError("読み上げテキストが空です。")
     if not x_vector_only_mode and not (ref_text or "").strip():
         _logger.error("ref_text が未入力")
-        raise VoiceCloneError(
-            "ref_text が必要です。参照音声の文字起こしを入力してください。"
-        )
+        raise VoiceCloneError("ref_text が必要です。参照音声の文字起こしを入力してください。")
 
     cache_key = f"{model_id}_{dtype}"
     if cache_key not in _MODEL_CACHE:
@@ -127,9 +123,9 @@ def generate_voice_waveform(
     with tempfile.TemporaryDirectory() as td:
         ref_wav = Path(td) / "ref.wav"
         try:
-            AudioSegment.from_file(str(ref_audio)).set_channels(1).set_frame_rate(
-                16000
-            ).export(str(ref_wav), format="wav")
+            AudioSegment.from_file(str(ref_audio)).set_channels(1).set_frame_rate(16000).export(
+                str(ref_wav), format="wav"
+            )
             _logger.info("音声変換完了: %s", ref_audio)
         except Exception as exc:
             _logger.error("音声変換失敗: %s", exc)
@@ -151,9 +147,7 @@ def generate_voice_waveform(
 
     if not wavs:
         _logger.error("音声生成結果が空")
-        raise VoiceCloneError(
-            "音声生成結果が空でした。入力テキストを見直してください。"
-        )
+        raise VoiceCloneError("音声生成結果が空でした。入力テキストを見直してください。")
 
     return np.asarray(wavs[0], dtype=np.float32), int(sample_rate)
 
@@ -169,9 +163,7 @@ def synthesize_voice_clone(
 ) -> dict[str, Any]:
     _logger.info("入力検証開始")
 
-    if errors := validate_required_inputs(
-        ref_audio_path, ref_text, input_text, output_dir
-    ):
+    if errors := validate_required_inputs(ref_audio_path, ref_text, input_text, output_dir):
         _logger.warning("入力エラー: %s", errors)
         return {"ok": False, "message": " / ".join(errors)}
 

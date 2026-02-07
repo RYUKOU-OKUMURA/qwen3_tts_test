@@ -11,6 +11,9 @@ brew install uv
 brew install ffmpeg
 # 依存インストール
 uv sync
+
+# 開発用ツール（ruff, mypy）を含める場合
+uv sync --all-extras
 ```
 
 ## 起動
@@ -40,6 +43,19 @@ uv run python src/qwen3_tts_test/voice_clone_batch.py \
   --ref-text-file myvoice_ref.txt \
   --text-file input.txt \
   --out out.wav
+```
+
+## 開発
+
+```bash
+# Lint
+uv run ruff check .
+
+# Format
+uv run ruff format .
+
+# Type check
+uv run mypy src/
 ```
 
 ## 必要条件

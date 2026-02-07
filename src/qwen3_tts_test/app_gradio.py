@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 import logging
-import sys
+import os
 import threading
 from pathlib import Path
 from typing import Any
 
 import gradio as gr
-
 import torch
 
 from .voice_clone_core import (
@@ -16,11 +15,6 @@ from .voice_clone_core import (
     synthesize_voice_clone,
     validate_required_inputs,
 )
-
-if sys.version_info < (3, 9):
-    import importlib_resources as resources
-else:
-    from importlib import resources
 
 # MPSチェックはvoice_clone_coreで実行済み（インポート時にエラー終了）
 
@@ -34,8 +28,14 @@ MODEL_PRESETS = {
 }
 
 DEFAULT_MODEL = MODEL_QUALITY
-DEFAULT_OUTPUT_DIR = str((Path(__file__).resolve().parent.parent / "outputs").resolve())
-LOG_FILE = Path(__file__).resolve().parent.parent / "logs" / "app.log"
+
+# Use environment variable or current working directory as base
+_BASE_DIR = Path(os.environ.get("APP_BASE_DIR", Path.cwd())).resolve()
+DEFAULT_OUTPUT_DIR = str(_BASE_DIR / "outputs")
+LOG_FILE = _BASE_DIR / "logs" / "app.log"
+
+# Ensure log directory exists
+LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 STEPS = ["入力チェック", "モデル読み込み", "音声生成", "ファイル保存"]
 
@@ -52,18 +52,14 @@ def run_generation(
     logger = setup_logging(LOG_FILE)
     gradio_handler = GradioLogHandler()
     gradio_handler.setLevel(logging.INFO)
-    gradio_handler.setFormatter(
-        logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    )
+    gradio_handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
     logger.addHandler(gradio_handler)
     gradio_handler.clear()
 
     current_step = 0
     status_text = "待機中"
 
-    def flush(
-        audio_path: str | None = None, out_path: str = "", enable_button: bool = True
-    ) -> Any:
+    def flush(audio_path: str | None = None, out_path: str = "", enable_button: bool = True) -> Any:
         step_display = f"[{current_step}/{len(STEPS)}] {STEPS[current_step - 1] if current_step > 0 else ''}".strip()
         return (
             gradio_handler.get_logs(),
@@ -78,9 +74,7 @@ def run_generation(
     logger.info("入力チェック開始")
     yield flush(enable_button=False)
 
-    if errors := validate_required_inputs(
-        ref_audio_path, ref_text, input_text, output_dir
-    ):
+    if errors := validate_required_inputs(ref_audio_path, ref_text, input_text, output_dir):
         current_step, status_text = 0, "入力エラー"
         logger.warning("入力エラー: %s", errors)
         yield flush(enable_button=True)
@@ -170,13 +164,12 @@ def run_generation(
 def apply_model_preset(preset_label: str, current_model_id: str) -> Any:
     preset_model = MODEL_PRESETS.get(preset_label, "__custom__")
     if preset_model == "__custom__":
-        return gr.update(
-            value=current_model_id.strip() or DEFAULT_MODEL, interactive=True
-        )
+        return gr.update(value=current_model_id.strip() or DEFAULT_MODEL, interactive=True)
     return gr.update(value=preset_model, interactive=False)
 
 
 def build_ui() -> gr.Blocks:
+    demo: gr.Blocks
     with gr.Blocks(title="Voice Clone GUI (macOS)") as demo:
         gr.Markdown("## Voice Clone GUI (macOS)")
         gr.Markdown(
@@ -207,18 +200,14 @@ def build_ui() -> gr.Blocks:
                     choices=["Japanese", "English", "auto"],
                     value="Japanese",
                 )
-                output_dir = gr.Textbox(
-                    label="保存先ディレクトリ", value=DEFAULT_OUTPUT_DIR
-                )
+                output_dir = gr.Textbox(label="保存先ディレクトリ", value=DEFAULT_OUTPUT_DIR)
                 with gr.Accordion("詳細設定", open=False):
                     model_preset = gr.Dropdown(
                         label="モデルプリセット",
                         choices=list(MODEL_PRESETS.keys()),
                         value="品質重視 (1.7B-Base)",
                     )
-                    model_id = gr.Textbox(
-                        label="モデルID", value=DEFAULT_MODEL, interactive=False
-                    )
+                    model_id = gr.Textbox(label="モデルID", value=DEFAULT_MODEL, interactive=False)
                     use_float32 = gr.Checkbox(
                         label="float32を使用（推奨）",
                         value=True,
@@ -227,12 +216,8 @@ def build_ui() -> gr.Blocks:
                     gr.Markdown("モデルを自由入力する場合は `カスタム入力` を選択。")
 
                 run_button = gr.Button("音声を生成", variant="primary")
-                step_display = gr.Textbox(
-                    label="進捗", value="待機中", interactive=False
-                )
-                status_box = gr.Textbox(
-                    label="処理ステータス", value="待機中", interactive=False
-                )
+                step_display = gr.Textbox(label="進捗", value="待機中", interactive=False)
+                status_box = gr.Textbox(label="処理ステータス", value="待機中", interactive=False)
                 log_box = gr.Textbox(label="実行ログ", lines=14, interactive=False)
 
         output_audio = gr.Audio(label="生成音声", type="filepath", interactive=False)
