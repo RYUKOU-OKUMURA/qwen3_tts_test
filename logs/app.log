@@ -1,0 +1,56 @@
+2026-02-08 00:36:02,070 - INFO - 入力チェック開始
+2026-02-08 00:36:02,074 - INFO - モデル読み込み開始
+2026-02-08 00:36:02,075 - INFO - 入力検証開始
+2026-02-08 00:36:02,076 - INFO - 出力ファイル: /Users/ryukouokumura/Desktop/boss-workspace/qwen3_tts_test/outputs/voiceclone_20260208_003602.wav
+2026-02-08 00:36:02,078 - INFO - 音声生成開始: model=Qwen/Qwen3-TTS-12Hz-1.7B-Base, language=Japanese
+2026-02-08 00:36:02,125 - INFO - モデル読み込み開始: Qwen/Qwen3-TTS-12Hz-1.7B-Base (dtype=torch.float32)
+2026-02-08 00:36:02,501 - INFO - talker_config is None. Initializing talker model with default values
+2026-02-08 00:36:02,502 - INFO - speaker_encoder_config is None. Initializing talker model with default values
+2026-02-08 00:36:02,502 - INFO - code_predictor_config is None. Initializing code_predictor model with default values
+2026-02-08 00:36:02,505 - INFO - code_predictor_config is None. Initializing code_predictor model with default values
+2026-02-08 00:44:48,230 - INFO - encoder_config is None. Initializing encoder with default values
+2026-02-08 00:44:48,235 - INFO - decoder_config is None. Initializing decoder with default values
+2026-02-08 00:45:00,254 - INFO - モデル読み込み完了: Qwen/Qwen3-TTS-12Hz-1.7B-Base (dtype=torch.float32)
+2026-02-08 00:45:03,992 - INFO - 音声変換完了: /private/var/folders/t_/n4sxjh9j5xxb_ghb3xrdk92c0000gn/T/gradio/a61e990bba7ff71336213779cab10475e7ed09d372725246d51a907591134f39/Qwen3-TTS用音声 2.m4a
+2026-02-08 00:45:03,993 - INFO - 音声生成実行中...
+2026-02-08 00:45:25,591 - INFO - code_predictor_config is None. Initializing code_predictor model with default values
+2026-02-08 00:46:07,739 - INFO - 音声生成完了: 1 chunks, sr=24000
+2026-02-08 00:46:07,815 - INFO - ファイル保存完了: /Users/ryukouokumura/Desktop/boss-workspace/qwen3_tts_test/outputs/voiceclone_20260208_003602.wav
+2026-02-08 00:46:07,829 - INFO - 保存しました: /Users/ryukouokumura/Desktop/boss-workspace/qwen3_tts_test/outputs/voiceclone_20260208_003602.wav (sr=24000)
+2026-02-08 00:46:07,829 - INFO - 処理完了
+2026-02-08 00:46:46,255 - INFO - 入力チェック開始
+2026-02-08 00:46:46,270 - INFO - モデル読み込み開始
+2026-02-08 00:46:46,280 - INFO - 入力検証開始
+2026-02-08 00:46:46,290 - INFO - 出力ファイル: /Users/ryukouokumura/Desktop/boss-workspace/qwen3_tts_test/outputs/voiceclone_20260208_004646.wav
+2026-02-08 00:46:46,294 - INFO - 音声生成開始: model=Qwen/Qwen3-TTS-12Hz-1.7B-Base, language=Japanese
+2026-02-08 00:46:46,636 - INFO - 音声変換完了: /private/var/folders/t_/n4sxjh9j5xxb_ghb3xrdk92c0000gn/T/gradio/a61e990bba7ff71336213779cab10475e7ed09d372725246d51a907591134f39/Qwen3-TTS用音声 2.m4a
+2026-02-08 00:46:46,636 - INFO - 音声生成実行中...
+2026-02-08 00:46:59,339 - INFO - code_predictor_config is None. Initializing code_predictor model with default values
+2026-02-08 00:48:26,143 - INFO - 音声生成完了: 1 chunks, sr=24000
+2026-02-08 00:48:26,230 - INFO - ファイル保存完了: /Users/ryukouokumura/Desktop/boss-workspace/qwen3_tts_test/outputs/voiceclone_20260208_004646.wav
+2026-02-08 00:48:26,243 - INFO - 保存しました: /Users/ryukouokumura/Desktop/boss-workspace/qwen3_tts_test/outputs/voiceclone_20260208_004646.wav (sr=24000)
+2026-02-08 00:48:26,245 - INFO - 処理完了
+2026-02-08 00:53:18,896 - INFO - 入力チェック開始
+2026-02-08 00:53:18,921 - INFO - モデル読み込み開始
+2026-02-08 00:53:18,922 - INFO - 入力検証開始
+2026-02-08 00:53:18,927 - INFO - 出力ファイル: /Users/ryukouokumura/Desktop/boss-workspace/qwen3_tts_test/outputs/voiceclone_20260208_005318.wav
+2026-02-08 00:53:18,930 - INFO - 音声生成開始: model=Qwen/Qwen3-TTS-12Hz-1.7B-Base, language=Japanese
+2026-02-08 00:53:19,213 - INFO - 音声変換完了: /private/var/folders/t_/n4sxjh9j5xxb_ghb3xrdk92c0000gn/T/gradio/a61e990bba7ff71336213779cab10475e7ed09d372725246d51a907591134f39/Qwen3-TTS用音声 2.m4a
+2026-02-08 00:53:19,213 - INFO - 音声生成実行中...
+2026-02-08 00:53:47,210 - INFO - code_predictor_config is None. Initializing code_predictor model with default values
+2026-02-08 00:54:14,222 - INFO - 音声生成完了: 1 chunks, sr=24000
+2026-02-08 00:54:14,369 - INFO - ファイル保存完了: /Users/ryukouokumura/Desktop/boss-workspace/qwen3_tts_test/outputs/voiceclone_20260208_005318.wav
+2026-02-08 00:54:14,374 - INFO - 保存しました: /Users/ryukouokumura/Desktop/boss-workspace/qwen3_tts_test/outputs/voiceclone_20260208_005318.wav (sr=24000)
+2026-02-08 00:54:14,375 - INFO - 処理完了
+2026-02-08 01:03:02,445 - INFO - 入力チェック開始
+2026-02-08 01:03:02,460 - INFO - モデル読み込み開始
+2026-02-08 01:03:02,461 - INFO - 入力検証開始
+2026-02-08 01:03:02,462 - INFO - 出力ファイル: /Users/ryukouokumura/Desktop/boss-workspace/qwen3_tts_test/outputs/voiceclone_20260208_010302.wav
+2026-02-08 01:03:02,463 - INFO - 音声生成開始: model=Qwen/Qwen3-TTS-12Hz-1.7B-Base, language=Japanese
+2026-02-08 01:03:02,769 - INFO - 音声変換完了: /private/var/folders/t_/n4sxjh9j5xxb_ghb3xrdk92c0000gn/T/gradio/a61e990bba7ff71336213779cab10475e7ed09d372725246d51a907591134f39/Qwen3-TTS用音声 2.m4a
+2026-02-08 01:03:02,769 - INFO - 音声生成実行中...
+2026-02-08 01:03:34,806 - INFO - code_predictor_config is None. Initializing code_predictor model with default values
+2026-02-08 01:09:21,303 - INFO - 音声生成完了: 1 chunks, sr=24000
+2026-02-08 01:09:21,552 - INFO - ファイル保存完了: /Users/ryukouokumura/Desktop/boss-workspace/qwen3_tts_test/outputs/voiceclone_20260208_010302.wav
+2026-02-08 01:09:21,590 - INFO - 保存しました: /Users/ryukouokumura/Desktop/boss-workspace/qwen3_tts_test/outputs/voiceclone_20260208_010302.wav (sr=24000)
+2026-02-08 01:09:21,599 - INFO - 処理完了
