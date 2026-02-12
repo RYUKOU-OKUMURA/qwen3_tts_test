@@ -54,3 +54,19 @@
 2026-02-08 01:09:21,552 - INFO - ファイル保存完了: /Users/ryukouokumura/Desktop/boss-workspace/qwen3_tts_test/outputs/voiceclone_20260208_010302.wav
 2026-02-08 01:09:21,590 - INFO - 保存しました: /Users/ryukouokumura/Desktop/boss-workspace/qwen3_tts_test/outputs/voiceclone_20260208_010302.wav (sr=24000)
 2026-02-08 01:09:21,599 - INFO - 処理完了
+2026-02-08 02:34:43,221 - INFO - 入力チェック開始
+2026-02-08 02:34:43,225 - INFO - モデル読み込み開始
+2026-02-08 02:34:43,226 - INFO - 入力検証開始
+2026-02-08 02:34:43,229 - INFO - 出力ファイル: /Users/ryukouokumura/Desktop/boss-workspace/qwen3_tts_test/outputs/voiceclone_20260208_023443.wav
+2026-02-08 02:34:43,231 - INFO - 音声生成開始: model=Qwen/Qwen3-TTS-12Hz-1.7B-Base, language=Japanese
+2026-02-08 02:34:43,276 - INFO - モデル読み込み開始: Qwen/Qwen3-TTS-12Hz-1.7B-Base (dtype=torch.float32)
+2026-02-08 02:34:43,786 - INFO - talker_config is None. Initializing talker model with default values
+2026-02-08 02:34:43,786 - INFO - speaker_encoder_config is None. Initializing talker model with default values
+2026-02-08 02:34:43,787 - INFO - code_predictor_config is None. Initializing code_predictor model with default values
+2026-02-08 02:34:43,788 - INFO - code_predictor_config is None. Initializing code_predictor model with default values
+2026-02-08 02:35:02,433 - INFO - encoder_config is None. Initializing encoder with default values
+2026-02-08 02:35:02,434 - INFO - decoder_config is None. Initializing decoder with default values
+2026-02-08 02:35:38,298 - INFO - モデル読み込み完了: Qwen/Qwen3-TTS-12Hz-1.7B-Base (dtype=torch.float32)
+2026-02-08 02:35:38,467 - INFO - 音声変換完了: /private/var/folders/t_/n4sxjh9j5xxb_ghb3xrdk92c0000gn/T/gradio/1abe87ebe9d57da52af35602b6e6667924b983a116345725475d929665436a1d/Qwen3-TTS用音声.m4a
+2026-02-08 02:35:38,467 - INFO - 音声生成実行中...
+2026-02-08 02:35:44,791 - INFO - code_predictor_config is None. Initializing code_predictor model with default values
